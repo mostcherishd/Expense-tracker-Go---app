@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevScale Expense — Sign In</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --cream:        #f7f3ee;
+            --cream-deep:   #efe7db;
+            --paper:        #fffdf9;
+            --ink:          #241f1a;
+            --ink-soft:     #5c5449;
+            --terracotta:   #c1552c;
+            --terracotta-d: #a8451f;
+            --terracotta-t: rgba(193,85,44,0.1);
+            --pine:         #7a2320;
+            --pine-light:   #a8433a;
+            --line:         #e2d8c8;
+            --error:        #b3261e;
+            --error-bg:     #fbeae8;
+            --serif:        'Fraunces', Georgia, serif;
+            --sans:         'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        html, body { height: 100%; }
+
+        body {
+            font-family: var(--sans);
+            background: var(--cream);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            min-height: 100vh;
+        }
+
+        /* ——— Left: editorial hero ——— */
+        .hero {
+            position: relative;
+            background: linear-gradient(160deg, var(--pine) 0%, #3d1210 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 48px;
+            color: var(--paper);
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 85% 12%, rgba(240,201,168,0.16) 0%, transparent 45%),
+                radial-gradient(circle at 10% 90%, rgba(240,201,168,0.10) 0%, transparent 40%);
+        }
+        .hero > * { position: relative; z-index: 1; }
+
+        .hero-mark {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--serif);
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+        .hero-mark svg { width: 26px; height: 26px; }
+        .hero-mark em { font-style: normal; color: #f0c9a8; }
+
+        .hero-issue {
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 18px;
+        }
+        .hero-headline {
+            font-family: var(--serif);
+            font-size: clamp(38px, 4.4vw, 58px);
+            font-weight: 600;
+            line-height: 1.04;
+            letter-spacing: -1px;
+            max-width: 560px;
+        }
+        .hero-headline em {
+            font-style: italic;
+            font-weight: 500;
+            color: #f0c9a8;
+        }
+        .hero-caption {
+            margin-top: 20px;
+            font-size: 14.5px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.8);
+            max-width: 420px;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 36px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.25);
+        }
+        .hero-stat-num {
+            font-family: var(--serif);
+            font-size: 26px;
+            font-weight: 600;
+        }
+        .hero-stat-label {
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            margin-top: 3px;
+        }
+
+        /* ——— Right: form ——— */
+        .form-side {
+            background: var(--paper);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px;
+        }
+        .form-inner {
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .form-kicker {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--terracotta);
+            margin-bottom: 14px;
+        }
+        .form-inner h1 {
+            font-family: var(--serif);
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -0.6px;
+            margin-bottom: 8px;
+        }
+        .form-inner > p.sub {
+            font-size: 14px;
+            color: var(--ink-soft);
+            margin-bottom: 30px;
+        }
+
+        .error-box {
+            display: flex;
+            gap: 10px;
+            background: var(--error-bg);
+            border: 1px solid rgba(179,38,30,0.25);
+            border-radius: 4px;
+            padding: 12px 14px;
+            margin-bottom: 22px;
+            font-size: 13px;
+            color: var(--error);
+            line-height: 1.5;
+        }
+
+        .field { margin-bottom: 18px; }
+        .field-label {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 8px;
+            letter-spacing: 0.2px;
+        }
+        .field-input {
+            width: 100%;
+            padding: 13px 0;
+            font-size: 15px;
+            font-family: var(--sans);
+            color: var(--ink);
+            background: transparent;
+            border: none;
+            border-bottom: 1.5px solid var(--line);
+            outline: none;
+            transition: border-color 0.15s ease;
+        }
+        .field-input::placeholder { color: #b6ab99; }
+        .field-input:focus { border-color: var(--terracotta); }
+
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: var(--sans);
+            letter-spacing: 0.3px;
+            color: var(--paper);
+            background: var(--ink);
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+        .btn-login:hover { background: var(--terracotta-d); }
+
+        .demo-box {
+            margin-top: 26px;
+            padding: 14px 16px;
+            background: var(--cream);
+            border-left: 3px solid var(--terracotta);
+            border-radius: 2px;
+        }
+        .demo-title {
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--ink-soft);
+            margin-bottom: 8px;
+        }
+        .demo-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12.5px;
+            color: var(--ink-soft);
+            margin-bottom: 5px;
+        }
+        .demo-row:last-child { margin-bottom: 0; }
+        .demo-row code {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .form-footer {
+            margin-top: 28px;
+            font-size: 13.5px;
+            color: var(--ink-soft);
+        }
+        .form-footer a {
+            color: var(--terracotta);
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+        }
+        .form-footer a:hover { border-color: var(--terracotta); }
+
+        @media (max-width: 880px) {
+            .layout { grid-template-columns: 1fr; }
+            .hero { min-height: 300px; padding: 32px; }
+            .hero-stats { display: none; }
+            .form-side { padding: 40px 28px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+
+        <div class="hero">
+            <div class="hero-mark">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16a1 1 0 0 1 1 1v3H3V5a1 1 0 0 1 1-1zm-1 6h18v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8zm12 3.5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0z"/></svg>
+                DevScale <em>Expense</em>
+            </div>
+
+            <div>
+                <div class="hero-issue">Issue No. 01 — Spend With Intention</div>
+                <h1 class="hero-headline">Know where<br>every <em>dollar</em> goes.</h1>
+                <p class="hero-caption">Track spending, watch your savings goal, and get a plan tailored to what you have today and what you want a year from now.</p>
+                <div class="hero-stats">
+                    <div>
+                        <div class="hero-stat-num">8</div>
+                        <div class="hero-stat-label">Categories</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">12mo</div>
+                        <div class="hero-stat-label">Planning Horizon</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">1-Click</div>
+                        <div class="hero-stat-label">Savings Plan</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-side">
+            <div class="form-inner">
+                <div class="form-kicker">Member Sign In</div>
+                <h1>Welcome back</h1>
+                <p class="sub">Sign in to track expenses and plan your savings.</p>
+
+                {{if .Error}}
+                <div class="error-box">{{.Error}}</div>
+                {{end}}
+
+                <form method="POST" action="/" autocomplete="on">
+                    <div class="field">
+                        <label class="field-label" for="username">Username</label>
+                        <input type="text" id="username" name="username" class="field-input" placeholder="e.g. dapo" autocomplete="username" spellcheck="false" required>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="password">Password</label>
+                        <input type="password" id="password" name="password" class="field-input" placeholder="••••••••" autocomplete="current-password" required>
+                    </div>
+                    <button type="submit" class="btn-login">Sign In →</button>
+                </form>
+
+                <div class="demo-box">
+                    <div class="demo-title">Demo credentials</div>
+                    <div class="demo-row"><span>Username</span><code>dapo</code></div>
+                    <div class="demo-row"><span>Password</span><code>welcome+1</code></div>
+                </div>
+
+                <p class="form-footer">New here? <a href="/register">Create an account</a></p>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevScale Expense — Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --cream:        #f7f3ee;
+            --paper:        #fffdf9;
+            --ink:          #241f1a;
+            --ink-soft:     #5c5449;
+            --terracotta:   #c1552c;
+            --terracotta-d: #a8451f;
+            --pine:         #7a2320;
+            --line:         #e2d8c8;
+            --error:        #b3261e;
+            --error-bg:     #fbeae8;
+            --success:      #33473a;
+            --success-bg:   #eaf0ea;
+            --serif:        'Fraunces', Georgia, serif;
+            --sans:         'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        html, body { height: 100%; }
+
+        body {
+            font-family: var(--sans);
+            background: var(--cream);
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 32px 20px;
+        }
+
+        .container { width: 100%; max-width: 460px; }
+
+        .card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 48px 44px;
+        }
+
+        .mark {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            font-family: var(--serif);
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 28px;
+        }
+        .mark svg { width: 22px; height: 22px; color: var(--terracotta); }
+        .mark em { font-style: normal; color: var(--terracotta); }
+
+        .header { text-align: center; margin-bottom: 30px; }
+        .form-kicker {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--terracotta);
+            margin-bottom: 12px;
+        }
+        .header h1 {
+            font-family: var(--serif);
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+        .header p { font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+
+        .success-message { text-align: center; }
+        .success-icon {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: var(--success-bg);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 18px;
+        }
+        .success-icon svg { width: 24px; height: 24px; fill: var(--success); }
+        .success-message h2 { font-family: var(--serif); font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+        .success-message p { font-size: 14px; color: var(--ink-soft); margin-bottom: 26px; line-height: 1.6; }
+
+        .error {
+            background: var(--error-bg);
+            border-radius: 4px;
+            padding: 12px 14px;
+            margin-bottom: 22px;
+            font-size: 13px;
+            color: var(--error);
+            line-height: 1.5;
+        }
+
+        .form-group { margin-bottom: 18px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+        label {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 0;
+            border: none;
+            border-bottom: 1.5px solid var(--line);
+            font-family: var(--sans);
+            font-size: 15px;
+            color: var(--ink);
+            background: transparent;
+            outline: none;
+            transition: border-color 0.15s ease;
+        }
+        input::placeholder { color: #b6ab99; }
+        input:focus { border-color: var(--terracotta); }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 6px;
+            background: var(--ink);
+            border: none;
+            border-radius: 2px;
+            color: var(--paper);
+            font-family: var(--sans);
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+        .btn:hover { background: var(--terracotta-d); }
+
+        .footer {
+            text-align: center;
+            margin-top: 26px;
+            padding-top: 24px;
+            border-top: 1px solid var(--line);
+            font-size: 13.5px;
+            color: var(--ink-soft);
+        }
+        .footer a { color: var(--terracotta); text-decoration: none; font-weight: 600; border-bottom: 1px solid transparent; }
+        .footer a:hover { border-color: var(--terracotta); }
+
+        .hint { font-size: 11.5px; color: #9a8f7c; margin-top: 6px; }
+
+        @media (max-width: 520px) {
+            .card { padding: 36px 26px; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="mark">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16a1 1 0 0 1 1 1v3H3V5a1 1 0 0 1 1-1zm-1 6h18v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8zm12 3.5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0z"/></svg>
+                DevScale <em>Expense</em>
+            </div>
+
+            {{if .Success}}
+            <div class="success-message">
+                <div class="success-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                </div>
+                <h2>You're all set</h2>
+                <p>Your account has been created.<br>You can now sign in and start tracking.</p>
+                <a href="/" class="btn" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;">Go to Sign In</a>
+            </div>
+            {{else}}
+            <div class="header">
+                <div class="form-kicker">Join Us</div>
+                <h1>Create your account</h1>
+                <p>Start tracking expenses and planning your savings.</p>
+            </div>
+
+            {{if .Error}}
+            <div class="error">{{.Error}}</div>
+            {{end}}
+
+            <form method="POST" action="/register">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" id="first_name" name="first_name" placeholder="Jane" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" placeholder="Doe" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Choose a username" required minlength="3">
+                    <div class="hint">At least 3 characters</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Create a password" required minlength="6">
+                    <div class="hint">At least 6 characters</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required minlength="6">
+                </div>
+
+                <button type="submit" class="btn">Create Account</button>
+            </form>
+            {{end}}
+
+            <div class="footer">
+                <p>Already have an account? <a href="/">Sign in here</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevScale Expense — Savings Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --cream: #f7f3ee;
+            --cream-deep: #efe7db;
+            --paper: #fffdf9;
+            --ink: #241f1a;
+            --ink-soft: #5c5449;
+            --ink-faint: #9a8f7c;
+            --terracotta: #c1552c;
+            --terracotta-d: #a8451f;
+            --terracotta-t: rgba(193, 85, 44, 0.1);
+            --pine: #7a2320;
+            --pine-t: rgba(122, 35, 32, 0.1);
+            --line: #e2d8c8;
+            --success: #33473a;
+            --success-bg: #eaf0ea;
+            --warn: #a8451f;
+            --warn-bg: #fbeae8;
+            --tight: #8a5a1f;
+            --tight-bg: #fdf0e2;
+            --error: #b3261e;
+            --error-bg: #fbeae8;
+            --serif: 'Fraunces', Georgia, serif;
+            --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            font-family: var(--sans);
+            background: var(--cream);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        /* ========= MASTHEAD (shared) ========= */
+        .masthead {
+            background: var(--paper);
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .masthead-inner {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 32px;
+            height: 74px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .masthead-left { display: flex; align-items: center; gap: 40px; }
+        .mark {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--serif);
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--ink);
+        }
+        .mark svg { width: 22px; height: 22px; color: var(--terracotta); }
+        .mark em { font-style: normal; color: var(--terracotta); }
+        .nav-links { display: flex; align-items: center; gap: 28px; margin-left: 8px; }
+        .nav-link { font-size: 13.5px; font-weight: 600; color: var(--ink-soft); text-decoration: none; transition: color 0.15s; }
+        .nav-link:hover, .nav-link.active { color: var(--terracotta); }
+        .nav-right { display: flex; align-items: center; gap: 22px; }
+        .nav-user { display: flex; align-items: center; gap: 10px; }
+        .nav-avatar {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: var(--cream-deep); border: 1px solid var(--line);
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--serif); font-size: 13px; font-weight: 600; color: var(--terracotta);
+        }
+        .nav-user-name { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+        .nav-user-role { font-size: 11px; color: var(--ink-faint); }
+        .btn-logout {
+            display: flex; align-items: center; gap: 7px;
+            padding: 9px 16px; background: transparent; border: 1px solid var(--line);
+            border-radius: 2px; color: var(--ink-soft); font-family: var(--sans);
+            font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+        }
+        .btn-logout svg { width: 14px; height: 14px; }
+        .btn-logout:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+        /* ========= EDITORIAL HEADER ========= */
+        .editorial-header {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 56px 32px 36px;
+        }
+        .issue-line {
+            font-size: 11px; font-weight: 600; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--terracotta); margin-bottom: 16px;
+        }
+        .editorial-header h1 {
+            font-family: var(--serif); font-size: clamp(32px, 4.2vw, 48px);
+            font-weight: 600; letter-spacing: -1px; line-height: 1.05; max-width: 700px;
+        }
+        .editorial-header h1 em { font-style: italic; color: var(--terracotta); font-weight: 500; }
+        .editorial-header p.lede {
+            font-size: 15.5px; color: var(--ink-soft); line-height: 1.6; max-width: 560px; margin-top: 16px;
+        }
+
+        /* ========= PAGE ========= */
+        .page { max-width: 1240px; margin: 0 auto; padding: 0 32px 80px; }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 32px;
+            align-items: start;
+        }
+
+        .panel {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 2px;
+        }
+        .panel-header {
+            padding: 22px 26px;
+            border-bottom: 1px solid var(--line);
+        }
+        .panel-title { font-family: var(--serif); font-size: 20px; font-weight: 600; }
+        .panel-sub { font-size: 13px; color: var(--ink-soft); margin-top: 6px; line-height: 1.5; }
+
+        .error {
+            margin: 20px 26px 0;
+            background: var(--error-bg);
+            border-radius: 4px;
+            padding: 12px 14px;
+            font-size: 13px;
+            color: var(--error);
+            line-height: 1.5;
+        }
+
+        /* Form */
+        .plan-form { padding: 24px 26px 26px; }
+        .field { margin-bottom: 22px; }
+        .field label {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+        .field .field-hint {
+            font-size: 12px;
+            color: var(--ink-faint);
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        .amount-input-wrap {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            border-bottom: 1.5px solid var(--line);
+            padding: 10px 0;
+            transition: border-color 0.15s;
+        }
+        .amount-input-wrap:focus-within { border-color: var(--terracotta); }
+        .amount-input-wrap .currency { font-size: 15px; color: var(--ink-faint); font-weight: 600; }
+        .amount-input-wrap input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-family: var(--sans);
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--ink);
+        }
+        .amount-input-wrap input::placeholder { color: #b6ab99; font-weight: 400; }
+
+        .btn-plan {
+            width: 100%;
+            padding: 15px;
+            margin-top: 6px;
+            background: var(--ink);
+            border: none;
+            border-radius: 2px;
+            color: var(--paper);
+            font-family: var(--sans);
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .btn-plan:hover { background: var(--terracotta-d); }
+
+        /* Result panel */
+        .result-empty {
+            padding: 60px 26px;
+            text-align: center;
+            color: var(--ink-faint);
+        }
+        .result-empty svg { width: 40px; height: 40px; margin-bottom: 14px; color: var(--line); }
+        .result-empty p { font-size: 14px; max-width: 320px; margin: 0 auto; line-height: 1.6; }
+
+        .result-body { padding: 26px; }
+
+        .status-banner {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 18px 20px;
+            border-radius: 4px;
+            margin-bottom: 24px;
+        }
+        .status-banner.on-track { background: var(--success-bg); }
+        .status-banner.tight { background: var(--tight-bg); }
+        .status-banner.at-risk { background: var(--warn-bg); }
+
+        .status-pill {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .status-pill.on-track { background: rgba(51,71,58,0.14); color: var(--success); }
+        .status-pill.tight { background: rgba(138,90,31,0.14); color: var(--tight); }
+        .status-pill.at-risk { background: rgba(168,69,31,0.14); color: var(--warn); }
+
+        .status-headline {
+            font-family: var(--serif);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ink);
+            line-height: 1.4;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+        .metric-box {
+            background: var(--cream);
+            border-radius: 2px;
+            padding: 16px 18px;
+        }
+        .metric-label {
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+            margin-bottom: 8px;
+        }
+        .metric-value {
+            font-family: var(--serif);
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--ink);
+        }
+        .metric-note { font-size: 11.5px; color: var(--ink-soft); margin-top: 4px; }
+
+        .advice-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+            margin-bottom: 14px;
+        }
+
+        .advice-list { list-style: none; }
+        .advice-item {
+            display: flex;
+            gap: 12px;
+            padding: 14px 0;
+            border-top: 1px solid var(--line);
+            font-size: 13.5px;
+            color: var(--ink-soft);
+            line-height: 1.6;
+        }
+        .advice-item:first-child { border-top: none; }
+        .advice-num {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--terracotta-t);
+            color: var(--terracotta);
+            font-family: var(--serif);
+            font-size: 11.5px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .projected-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--line);
+        }
+        .projected-label { font-size: 13px; color: var(--ink-soft); }
+        .projected-amount { font-family: var(--serif); font-size: 24px; font-weight: 600; }
+        .projected-amount.negative { color: var(--warn); }
+        .projected-amount.positive { color: var(--success); }
+
+        /* ========= RESPONSIVE ========= */
+        @media (max-width: 980px) {
+            .content-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 680px) {
+            .masthead-inner { padding: 0 20px; flex-wrap: wrap; height: auto; padding-top: 14px; padding-bottom: 14px; gap: 12px; }
+            .nav-links { gap: 18px; }
+            .nav-user-name, .nav-user-role { display: none; }
+            .editorial-header { padding: 32px 20px 24px; }
+            .page { padding: 0 20px 60px; }
+            .metrics-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========= MASTHEAD ========= -->
+    <header class="masthead">
+        <div class="masthead-inner">
+            <div class="masthead-left">
+                <div class="mark">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16a1 1 0 0 1 1 1v3H3V5a1 1 0 0 1 1-1zm-1 6h18v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8zm12 3.5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0z" /></svg>
+                    DevScale <em>Expense</em>
+                </div>
+                <nav class="nav-links">
+                    <a href="/dashboard" class="nav-link">Dashboard</a>
+                    <a href="/planner" class="nav-link active">Savings Planner</a>
+                </nav>
+            </div>
+            <div class="nav-right">
+                <div class="nav-user">
+                    <div class="nav-avatar">{{initials .User.FirstName .User.LastName}}</div>
+                    <div>
+                        <div class="nav-user-name">{{fullName .User.FirstName .User.LastName}}</div>
+                        <div class="nav-user-role">Member</div>
+                    </div>
+                </div>
+                <a href="/logout" class="btn-logout">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========= EDITORIAL HEADER ========= -->
+    <div class="editorial-header">
+        <div class="issue-line">12-Month Outlook</div>
+        <h1>Plan your <em>next year</em> of money.</h1>
+        <p class="lede">Tell us what you have saved today, how much more you'd like to save, and what you expect to spend over the next 12 months — we'll suggest how to pace it.</p>
+    </div>
+
+    <!-- ========= PAGE ========= -->
+    <main class="page">
+        <div class="content-grid">
+
+            <!-- Form panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">Your Numbers</div>
+                    <div class="panel-sub">All figures are for the next 12 months. Update anytime to refresh your plan.</div>
+                </div>
+
+                {{if .Error}}
+                <div class="error">{{.Error}}</div>
+                {{end}}
+
+                <form class="plan-form" method="POST" action="/planner">
+                    <div class="field">
+                        <label for="current_savings">What do you currently have saved?</label>
+                        <div class="field-hint">Your total savings balance right now.</div>
+                        <div class="amount-input-wrap">
+                            <span class="currency">$</span>
+                            <input type="number" id="current_savings" name="current_savings" step="0.01" min="0"
+                                placeholder="0.00"
+                                value="{{if .Result}}{{.Result.CurrentSavings}}{{end}}" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="savings_goal">How much more do you want to save?</label>
+                        <div class="field-hint">An additional amount you'd like to add to savings over the next year.</div>
+                        <div class="amount-input-wrap">
+                            <span class="currency">$</span>
+                            <input type="number" id="savings_goal" name="savings_goal" step="0.01" min="0"
+                                placeholder="0.00"
+                                value="{{if .Result}}{{.Result.SavingsGoal}}{{end}}" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="planned_spend">How much do you plan to spend?</label>
+                        <div class="field-hint">Your expected total spending over the next 12 months.</div>
+                        <div class="amount-input-wrap">
+                            <span class="currency">$</span>
+                            <input type="number" id="planned_spend" name="planned_spend" step="0.01" min="0"
+                                placeholder="0.00"
+                                value="{{if .Result}}{{.Result.PlannedSpend}}{{end}}" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-plan">Suggest My Plan →</button>
+                </form>
+            </div>
+
+            <!-- Result panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">Your Suggested Plan</div>
+                    <div class="panel-sub">Based on the numbers you provide.</div>
+                </div>
+
+                {{if .Result}}
+                <div class="result-body">
+                    <div class="status-banner {{.Result.Status}}">
+                        <div>
+                            <span class="status-pill {{.Result.Status}}">{{.Result.StatusLabel}}</span>
+                            <div class="status-headline">{{.Result.Headline}}</div>
+                        </div>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="metric-label">Monthly Savings Target</div>
+                            <div class="metric-value">{{formatMoney .Result.MonthlySavingsTarget}}</div>
+                            <div class="metric-note">to reach your goal in 12 months</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-label">Monthly Spend Budget</div>
+                            <div class="metric-value">{{formatMoney .Result.MonthlySpendBudget}}</div>
+                            <div class="metric-note">≈ {{formatMoney .Result.WeeklySpendBudget}} per week</div>
+                        </div>
+                    </div>
+
+                    <div class="advice-title">Recommendations</div>
+                    <ul class="advice-list">
+                        {{range $i, $tip := .Result.Advice}}
+                        <li class="advice-item">
+                            <span class="advice-num">{{addOne $i}}</span>
+                            <span>{{$tip}}</span>
+                        </li>
+                        {{end}}
+                    </ul>
+
+                    <div class="projected-row">
+                        <span class="projected-label">Projected balance in 12 months</span>
+                        <span class="projected-amount {{if lt .Result.ProjectedEndBalance 0.0}}negative{{else}}positive{{end}}">{{formatMoney .Result.ProjectedEndBalance}}</span>
+                    </div>
+                </div>
+                {{else}}
+                <div class="result-empty">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>
+                    <p>Fill in the form to see your personalized savings and spending suggestion for the year ahead.</p>
+                </div>
+                {{end}}
+            </div>
+
+        </div>
+    </main>
+
+</body>
+
+</html>
