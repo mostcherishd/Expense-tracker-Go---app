@@ -48,7 +48,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/devscale_expense_abayomi:v1
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/expense_abayomi:v2
 
 
 
