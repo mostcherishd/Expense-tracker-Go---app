@@ -1,4 +1,4 @@
-name: Devscale_Expense Go CI
+name: Expense_Tracker Go CI
 on:
   push:
     branches:
